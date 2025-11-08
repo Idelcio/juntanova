@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/" class="logo">
+        <h1>Junta<br>Nova</h1>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Início</a></li>
+        <li><a href="/produto">Produto</a></li>
+        <li><a href="/logout">Sair</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section style="padding: 4rem 0; background: var(--light-gray); min-height: 80vh;">
+    <div class="container">
+      <h2 style="color: var(--primary-blue); margin-bottom: 2rem;">Finalizar Compra</h2>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <!-- Endereço de Entrega -->
+        <div>
+          <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+            <h3 style="color: var(--primary-blue); margin-bottom: 1.5rem;">Endereço de Entrega</h3>
+            <form id="checkoutForm" method="POST" action="/checkout/processar">
+              <div class="form-group">
+                <label for="cep">CEP</label>
+                <input type="text" id="cep" name="cep" value="<%= usuario.endereco.cep %>" required>
+              </div>
+
+              <div class="form-group">
+                <label for="rua">Rua</label>
+                <input type="text" id="rua" name="rua" value="<%= usuario.endereco.rua %>" required>
+              </div>
+
+              <div class="form-group">
+                <label for="numero">Número</label>
+                <input type="text" id="numero" name="numero" value="<%= usuario.endereco.numero %>" required>
+              </div>
+
+              <div class="form-group">
+                <label for="complemento">Complemento</label>
+                <input type="text" id="complemento" name="complemento" value="<%= usuario.endereco.complemento || '' %>">
+              </div>
+
+              <div class="form-group">
+                <label for="bairro">Bairro</label>
+                <input type="text" id="bairro" name="bairro" value="<%= usuario.endereco.bairro %>" required>
+              </div>
+
+              <div class="form-group">
+                <label for="cidade">Cidade</label>
+                <input type="text" id="cidade" name="cidade" value="<%= usuario.endereco.cidade %>" required>
+              </div>
+
+              <div class="form-group">
+                <label for="estado">Estado</label>
+                <input type="text" id="estado" name="estado" value="<%= usuario.endereco.estado %>" required readonly>
+              </div>
+
+              <button type="button" class="btn-secondary" onclick="calcularFrete()">Calcular Frete</button>
+
+              <div id="freteInfo" style="margin-top: 1rem; display: none;">
+                <p><strong>Frete:</strong> R$ <span id="valorFrete">0,00</span></p>
+                <p><strong>Prazo:</strong> <span id="prazoFrete">-</span></p>
+                <input type="hidden" id="valorFreteInput" name="valorFrete" value="0">
+              </div>
+
+              <button type="submit" class="btn-primary" style="width: 100%; margin-top: 2rem;" id="btnFinalizar" disabled>Finalizar Compra</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Resumo do Pedido -->
+        <div>
+          <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <h3 style="color: var(--primary-blue); margin-bottom: 1.5rem;">Resumo do Pedido</h3>
+
+            <% cart.forEach(item => { %>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--light-gray);">
+                <div>
+                  <strong><%= item.nome %></strong>
+                  <p style="color: var(--gray); font-size: 0.9rem;">Quantidade: <%= item.quantidade %></p>
+                </div>
+                <strong>R$ <%= (item.preco * item.quantidade).toFixed(2).replace('.', ',') %></strong>
+              </div>
+            <% }) %>
+
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <span>Subtotal:</span>
+              <span>R$ <%= total.toFixed(2).replace('.', ',') %></span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+              <span>Frete:</span>
+              <span id="freteResumo">-</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; padding-top: 1rem; border-top: 2px solid var(--primary-blue);">
+              <strong style="font-size: 1.2rem;">Total:</strong>
+              <strong style="font-size: 1.5rem; color: var(--primary-blue);" id="totalFinal">R$ <%= total.toFixed(2).replace('.', ',') %></strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2024 Junta Nova. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    async function calcularFrete() {
+      const cep = document.getElementById('cep').value.replace(/\D/g, '');
+
+      if (cep.length !== 8) {
+        alert('CEP inválido');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/calcular-frete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cep })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          const valorFrete = data.valorFrete;
+          const subtotal = <%= total %>;
+          const totalFinal = subtotal + valorFrete;
+
+          document.getElementById('valorFrete').textContent = valorFrete.toFixed(2).replace('.', ',');
+          document.getElementById('prazoFrete').textContent = data.prazo;
+          document.getElementById('freteResumo').textContent = 'R$ ' + valorFrete.toFixed(2).replace('.', ',');
+          document.getElementById('totalFinal').textContent = 'R$ ' + totalFinal.toFixed(2).replace('.', ',');
+          document.getElementById('valorFreteInput').value = valorFrete;
+          document.getElementById('freteInfo').style.display = 'block';
+          document.getElementById('btnFinalizar').disabled = false;
+        } else {
+          alert('Erro ao calcular frete');
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao calcular frete');
+      }
+    }
+  </script>
+</body>
+</html>

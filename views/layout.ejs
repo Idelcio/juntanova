@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/" class="logo">
+        <h1>Junta<br>Nova</h1>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Início</a></li>
+        <li><a href="/produto">Produto</a></li>
+        <% if (user) { %>
+          <li><a href="/logout">Sair</a></li>
+          <% if (user.isAdmin) { %>
+            <li><a href="/admin/dashboard" class="btn-admin">Admin</a></li>
+          <% } %>
+        <% } else { %>
+          <li><a href="/login">Login</a></li>
+        <% } %>
+        <li><a href="/carrinho" class="cart-icon">🛒 <span class="cart-count"><%= cart.length %></span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <%- body %>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Junta Nova</h3>
+          <p>Articulações novas em pouco tempo</p>
+          <p>100% Natural, sem contraindicações</p>
+        </div>
+        <div class="footer-section">
+          <h4>Links Rápidos</h4>
+          <ul>
+            <li><a href="/">Início</a></li>
+            <li><a href="/produto">Produto</a></li>
+            <li><a href="/cadastro">Cadastre-se</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Contato</h4>
+          <p>Email: contato@juntanova.com</p>
+          <p>Vendido em todo o Brasil</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Junta Nova. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

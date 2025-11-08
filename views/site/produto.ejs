@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/" class="logo">
+        <h1>Junta<br>Nova</h1>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Início</a></li>
+        <li><a href="/produto">Produto</a></li>
+        <% if (user) { %>
+          <li><a href="/logout">Sair</a></li>
+          <% if (user.isAdmin) { %>
+            <li><a href="/admin/dashboard" class="btn-admin">Admin</a></li>
+          <% } %>
+        <% } else { %>
+          <li><a href="/login">Login</a></li>
+        <% } %>
+        <li><a href="/carrinho" class="cart-icon">🛒 <span class="cart-count"><%= cart.length %></span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="produto-section">
+    <div class="container">
+      <div class="produto-container">
+        <div class="produto-imagens">
+          <div class="produto-imagem-principal">
+            <img src="/images/produto1.jpg" alt="Junta Nova">
+          </div>
+        </div>
+
+        <div class="produto-info">
+          <h1><%= produto.nome %></h1>
+          <p class="produto-descricao"><%= produto.descricao %></p>
+
+          <div class="produto-preco">
+            R$ <%= (produto.precoPromocional || produto.preco).toFixed(2).replace('.', ',') %>
+          </div>
+
+          <div class="produto-especificacoes">
+            <h3>Especificações:</h3>
+            <ul>
+              <li>✅ <%= produto.especificacoes.capsulas %> cápsulas</li>
+              <li>✅ <%= produto.especificacoes.dosagem %></li>
+              <li>✅ Peso líquido: <%= produto.especificacoes.peso %></li>
+              <li>✅ <%= produto.especificacoes.tipo %></li>
+            </ul>
+          </div>
+
+          <form id="addToCartForm">
+            <input type="hidden" name="produtoId" value="<%= produto.id %>">
+            <div class="quantidade-selector">
+              <label for="quantidade">Quantidade:</label>
+              <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="10">
+            </div>
+            <button type="submit" class="btn-primary btn-large">Adicionar ao Carrinho</button>
+          </form>
+
+          <div class="estoque-info" style="margin-top: 1rem; color: #4caf50; font-weight: 600;">
+            <% if (produto.estoque > 0) { %>
+              ✅ <%= produto.estoque %> unidades em estoque
+            <% } else { %>
+              ⚠️ Produto esgotado
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Benefícios Detalhados -->
+      <div class="beneficios-detalhados">
+        <h2>Benefícios do Junta Nova</h2>
+        <div class="beneficios-grid">
+          <div class="beneficio-card">
+            <div class="beneficio-icon">🦴</div>
+            <h3>Fortalece as Articulações</h3>
+            <p>Ajuda na regeneração e fortalecimento das articulações</p>
+          </div>
+          <div class="beneficio-card">
+            <div class="beneficio-icon">💪</div>
+            <h3>Aumenta a Mobilidade</h3>
+            <p>Melhora a flexibilidade e amplitude de movimentos</p>
+          </div>
+          <div class="beneficio-card">
+            <div class="beneficio-icon">❤️</div>
+            <h3>Reduz Desconfortos</h3>
+            <p>Alivia desconfortos articulares de forma natural</p>
+          </div>
+          <div class="beneficio-card">
+            <div class="beneficio-icon">🌿</div>
+            <h3>100% Natural</h3>
+            <p>Fórmula natural sem efeitos colaterais</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Depoimentos -->
+      <% if (depoimentos && depoimentos.length > 0) { %>
+      <div class="todos-depoimentos" id="depoimentos">
+        <h2>Depoimentos de Clientes</h2>
+        <div class="depoimentos-grid" style="background: transparent; padding: 0;">
+          <% depoimentos.forEach(depoimento => { %>
+            <div class="depoimento-card" style="background: white; color: var(--black); border: 1px solid var(--light-gray);">
+              <div class="estrelas" style="color: #FDD835;">
+                <% for(let i = 0; i < depoimento.estrelas; i++) { %>⭐<% } %>
+              </div>
+              <p class="depoimento-texto" style="color: var(--dark-gray);">"<%= depoimento.depoimento %>"</p>
+              <div class="depoimento-autor">
+                <strong style="color: var(--primary-blue);"><%= depoimento.nome %></strong>
+                <span style="color: var(--gray);"><%= depoimento.cidade %> - <%= depoimento.estado %></span>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Junta Nova</h3>
+          <p>Articulações novas em pouco tempo</p>
+          <p>100% Natural, sem contraindicações</p>
+        </div>
+        <div class="footer-section">
+          <h4>Links Rápidos</h4>
+          <ul>
+            <li><a href="/">Início</a></li>
+            <li><a href="/produto">Produto</a></li>
+            <li><a href="/cadastro">Cadastre-se</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Contato</h4>
+          <p>Email: contato@juntanova.com</p>
+          <p>Vendido em todo o Brasil</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Junta Nova. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('addToCartForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = {
+        produtoId: formData.get('produtoId'),
+        quantidade: parseInt(formData.get('quantidade'))
+      };
+
+      try {
+        const response = await fetch('/carrinho/adicionar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          alert('Produto adicionado ao carrinho!');
+          window.location.href = '/carrinho';
+        } else {
+          alert('Erro ao adicionar produto ao carrinho');
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao adicionar produto ao carrinho');
+      }
+    });
+  </script>
+</body>
+</html>

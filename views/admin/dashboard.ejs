@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/admin/dashboard" class="logo">
+        <h1>Junta Nova<br><span style="font-size: 0.5em;">ADMIN</span></h1>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/admin/dashboard">Dashboard</a></li>
+        <li><a href="/admin/pedidos">Pedidos</a></li>
+        <li><a href="/admin/estoque">Estoque</a></li>
+        <li><a href="/admin/pacotes">Pacotes</a></li>
+        <li><a href="/admin/depoimentos">Depoimentos</a></li>
+        <li><a href="/" target="_blank">Ver Site</a></li>
+        <li><a href="/admin/logout">Sair</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="admin-container">
+    <div class="container">
+      <div class="admin-header">
+        <h1>Dashboard</h1>
+        <p>Bem-vindo, <%= user.nome %>!</p>
+      </div>
+
+      <!-- Estatísticas -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Total de Pedidos</h3>
+          <div class="stat-value"><%= stats.totalPedidos %></div>
+        </div>
+        <div class="stat-card">
+          <h3>Pedidos Pendentes</h3>
+          <div class="stat-value"><%= stats.pedidosPendentes %></div>
+        </div>
+        <div class="stat-card">
+          <h3>Pedidos Pagos</h3>
+          <div class="stat-value"><%= stats.pedidosPagos %></div>
+        </div>
+        <div class="stat-card">
+          <h3>Estoque</h3>
+          <div class="stat-value"><%= stats.estoque %> un</div>
+        </div>
+      </div>
+
+      <!-- Gráficos -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+        <div class="chart-container">
+          <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Vendas por Estado</h3>
+          <canvas id="vendasEstadoChart"></canvas>
+        </div>
+        <div class="chart-container">
+          <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Top 10 Cidades</h3>
+          <canvas id="vendasCidadeChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Pedidos Recentes -->
+      <div class="chart-container">
+        <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Pedidos Recentes</h3>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th>Nº Pedido</th>
+                <th>Cliente</th>
+                <th>Cidade</th>
+                <th>Estado</th>
+                <th>Valor</th>
+                <th>Status</th>
+                <th>Data</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% pedidosRecentes.forEach(pedido => {
+                   const valorPedido = parseFloat(pedido.valorTotal ?? pedido.valor_total ?? 0) || 0;
+                 %>
+                <tr>
+                  <td><strong><%= pedido.numeroPedido %></strong></td>
+                  <td><%= pedido.usuario.nome %></td>
+                  <td><%= pedido.endereco.cidade %></td>
+                  <td><%= pedido.endereco.estado %></td>
+                  <td>R$ <%= valorPedido.toFixed(2).replace('.', ',') %></td>
+                  <td>
+                    <% if (pedido.status === 'pago') { %>
+                      <span class="badge badge-success">Pago</span>
+                    <% } else if (pedido.status === 'pendente') { %>
+                      <span class="badge badge-warning">Pendente</span>
+                    <% } else if (pedido.status === 'enviado') { %>
+                      <span class="badge badge-info">Enviado</span>
+                    <% } else if (pedido.status === 'cancelado') { %>
+                      <span class="badge badge-danger">Cancelado</span>
+                    <% } else { %>
+                      <span class="badge badge-info"><%= pedido.status %></span>
+                    <% } %>
+                  </td>
+                  <td><%= new Date(pedido.dataPedido).toLocaleDateString('pt-BR') %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2024 Junta Nova Admin. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Gráfico de Vendas por Estado
+    const vendasEstadoData = <%- JSON.stringify(vendasPorEstado) %>;
+    const ctx1 = document.getElementById('vendasEstadoChart').getContext('2d');
+    new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: vendasEstadoData.map(v => v._id || 'N/A'),
+        datasets: [{
+          label: 'Vendas',
+          data: vendasEstadoData.map(v => v.total),
+          backgroundColor: '#1565C0',
+          borderColor: '#0D47A1',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+
+    // Gráfico de Vendas por Cidade
+    const vendasCidadeData = <%- JSON.stringify(vendasPorCidade) %>;
+    const ctx2 = document.getElementById('vendasCidadeChart').getContext('2d');
+    new Chart(ctx2, {
+      type: 'horizontalBar',
+      data: {
+        labels: vendasCidadeData.map(v => `${v._id.cidade} - ${v._id.estado}`),
+        datasets: [{
+          label: 'Vendas',
+          data: vendasCidadeData.map(v => v.total),
+          backgroundColor: '#FDD835',
+          borderColor: '#F9A825',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        scales: {
+          x: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

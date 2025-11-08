@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/admin/dashboard" class="logo">
+        <h1>Junta Nova<br><span style="font-size: 0.5em;">ADMIN</span></h1>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/admin/dashboard">Dashboard</a></li>
+        <li><a href="/admin/pedidos">Pedidos</a></li>
+        <li><a href="/admin/estoque">Estoque</a></li>
+        <li><a href="/admin/pacotes">Pacotes</a></li>
+        <li><a href="/admin/depoimentos">Depoimentos</a></li>
+        <li><a href="/" target="_blank">Ver Site</a></li>
+        <li><a href="/admin/logout">Sair</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="admin-container">
+    <div class="container">
+      <div class="admin-header">
+        <h1>Gerenciar Pedidos</h1>
+        <p>Total: <%= pedidos.length %> pedidos</p>
+      </div>
+
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Nº Pedido</th>
+              <th>Cliente</th>
+              <th>Email</th>
+              <th>Telefone</th>
+              <th>Endereço</th>
+              <th>Itens</th>
+              <th>Valor Total</th>
+              <th>Status</th>
+              <th>Data</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% pedidos.forEach(pedido => { %>
+              <tr>
+                <td><strong><%= pedido.numeroPedido %></strong></td>
+                <td><%= pedido.usuario.nome %></td>
+                <td><%= pedido.usuario.email %></td>
+                <td><%= pedido.usuario.telefone %></td>
+                <td>
+                  <%= pedido.endereco.rua %>, <%= pedido.endereco.numero %><br>
+                  <%= pedido.endereco.cidade %> - <%= pedido.endereco.estado %><br>
+                  CEP: <%= pedido.endereco.cep %>
+                </td>
+                <td>
+                  <% pedido.itens.forEach(item => { %>
+                    <%= item.nome %> (x<%= item.quantidade %>)<br>
+                  <% }) %>
+                </td>
+                <td><strong>R$ <%= pedido.valorTotal.toFixed(2).replace('.', ',') %></strong></td>
+                <td>
+                  <% if (pedido.status === 'pago') { %>
+                    <span class="badge badge-success">Pago</span>
+                  <% } else if (pedido.status === 'pendente') { %>
+                    <span class="badge badge-warning">Pendente</span>
+                  <% } else if (pedido.status === 'enviado') { %>
+                    <span class="badge badge-info">Enviado</span>
+                  <% } else if (pedido.status === 'entregue') { %>
+                    <span class="badge badge-success">Entregue</span>
+                  <% } else if (pedido.status === 'cancelado') { %>
+                    <span class="badge badge-danger">Cancelado</span>
+                  <% } else { %>
+                    <span class="badge badge-info"><%= pedido.status %></span>
+                  <% } %>
+                </td>
+                <td><%= new Date(pedido.dataPedido).toLocaleDateString('pt-BR') %></td>
+                <td>
+                  <form method="POST" action="/admin/pedidos/<%= pedido._id %>/status" style="display: inline;">
+                    <select name="status" onchange="this.form.submit()" style="padding: 0.3rem; border-radius: 5px; border: 1px solid var(--gray);">
+                      <option value="">Mudar status</option>
+                      <option value="pago">Pago</option>
+                      <option value="processando">Processando</option>
+                      <option value="enviado">Enviado</option>
+                      <option value="entregue">Entregue</option>
+                      <option value="cancelado">Cancelado</option>
+                    </select>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2024 Junta Nova Admin. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

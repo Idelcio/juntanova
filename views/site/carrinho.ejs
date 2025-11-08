@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/" class="logo">
+        <h1>Junta<br>Nova</h1>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Início</a></li>
+        <li><a href="/produto">Produto</a></li>
+        <% if (user) { %>
+          <li><a href="/logout">Sair</a></li>
+        <% } else { %>
+          <li><a href="/login">Login</a></li>
+        <% } %>
+        <li><a href="/carrinho" class="cart-icon">🛒 <span class="cart-count"><%= cart.length %></span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section style="padding: 4rem 0; min-height: 70vh;">
+    <div class="container">
+      <h2 style="color: var(--primary-blue); margin-bottom: 2rem;">Meu Carrinho</h2>
+
+      <% if (cart.length === 0) { %>
+        <div style="text-align: center; padding: 3rem;">
+          <h3>Seu carrinho está vazio</h3>
+          <p style="margin: 1rem 0;">Adicione produtos para continuar comprando</p>
+          <a href="/produto" class="btn-primary">Ver Produtos</a>
+        </div>
+      <% } else { %>
+        <div class="table">
+          <table style="width: 100%;">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Preço</th>
+                <th style="text-align: center;">Quantidade</th>
+                <th>Subtotal</th>
+                <th style="text-align: center;">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% cart.forEach(item => { %>
+                <tr data-produto-id="<%= item.produtoId %>">
+                  <td><strong><%= item.nome %></strong></td>
+                  <td>R$ <%= item.preco.toFixed(2).replace('.', ',') %></td>
+                  <td style="text-align: center;">
+                    <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                      <button onclick="alterarQuantidade(<%= item.produtoId %>, -1)" style="background: var(--light-blue); color: white; border: none; padding: 0.3rem 0.7rem; border-radius: 5px; cursor: pointer; font-weight: bold;">-</button>
+                      <input type="number" id="qty-<%= item.produtoId %>" value="<%= item.quantidade %>" min="1" max="10" style="width: 60px; text-align: center; padding: 0.3rem; border: 1px solid var(--gray); border-radius: 5px;" onchange="atualizarQuantidade(<%= item.produtoId %>, this.value)">
+                      <button onclick="alterarQuantidade(<%= item.produtoId %>, 1)" style="background: var(--light-blue); color: white; border: none; padding: 0.3rem 0.7rem; border-radius: 5px; cursor: pointer; font-weight: bold;">+</button>
+                    </div>
+                  </td>
+                  <td class="subtotal-<%= item.produtoId %>">R$ <%= (item.preco * item.quantidade).toFixed(2).replace('.', ',') %></td>
+                  <td style="text-align: center;">
+                    <button onclick="removerItem(<%= item.produtoId %>)" style="background: #f44336; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-size: 0.9rem;">✕ Remover</button>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="max-width: 400px; margin: 2rem 0 0 auto; background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 2px solid var(--light-gray);">
+            <strong>Total:</strong>
+            <strong id="total-valor" style="color: var(--primary-blue); font-size: 1.5rem;">R$ <%= total.toFixed(2).replace('.', ',') %></strong>
+          </div>
+
+          <% if (user) { %>
+            <a href="/checkout" class="btn-primary" style="width: 100%; text-align: center;">Finalizar Compra</a>
+          <% } else { %>
+            <p style="margin-bottom: 1rem; text-align: center; color: var(--gray);">Faça login para continuar</p>
+            <a href="/login" class="btn-primary" style="width: 100%; text-align: center;">Fazer Login</a>
+            <a href="/cadastro" class="btn-secondary" style="width: 100%; text-align: center; margin-top: 0.5rem;">Cadastrar</a>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2024 Junta Nova. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function formatCurrency(value) {
+      const numero = Number(value) || 0;
+      return 'R$ ' + numero.toFixed(2).replace('.', ',');
+    }
+
+    async function atualizarQuantidade(produtoId, quantidade) {
+      const qtdNum = parseInt(quantidade, 10);
+
+      if (qtdNum < 1) {
+        if (confirm('Deseja remover este item do carrinho?')) {
+          await removerItem(produtoId, true);
+        } else {
+          const input = document.getElementById('qty-' + produtoId);
+          if (input) input.value = 1;
+        }
+        return;
+      }
+
+      try {
+        const response = await fetch('/carrinho/atualizar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            produtoId: Number(produtoId),
+            quantidade: qtdNum
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          atualizarInterface(data);
+        } else {
+          console.error('Erro ao atualizar quantidade');
+          // Recarrega a página em caso de erro
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        // Recarrega a página em caso de erro
+        window.location.reload();
+      }
+    }
+
+    function alterarQuantidade(produtoId, delta) {
+      const input = document.getElementById('qty-' + produtoId);
+      if (!input) return;
+
+      const quantidadeAtual = parseInt(input.value, 10) || 1;
+      const novaQuantidade = quantidadeAtual + delta;
+
+      if (novaQuantidade >= 1 && novaQuantidade <= 10) {
+        input.value = novaQuantidade;
+        atualizarQuantidade(produtoId, novaQuantidade);
+      }
+    }
+
+    async function removerItem(produtoId, skipConfirm) {
+      if (!skipConfirm && !confirm('Deseja remover este item do carrinho?')) {
+        return;
+      }
+
+      try {
+        const response = await fetch('/carrinho/remover', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ produtoId: Number(produtoId) })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.cart.length === 0) {
+            window.location.reload();
+          } else {
+            atualizarInterface(data);
+          }
+        } else {
+          console.error('Erro ao remover item');
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        window.location.reload();
+      }
+    }
+
+    function atualizarInterface(data) {
+      if (!data || !Array.isArray(data.cart)) {
+        return;
+      }
+
+      // Atualizar total
+      if (data.total !== undefined) {
+        const totalElement = document.getElementById('total-valor');
+        if (totalElement) {
+          totalElement.textContent = formatCurrency(data.total);
+        }
+      }
+
+      const itensAtivos = new Set(data.cart.map(item => String(item.produtoId)));
+
+      // Remover linhas que não existem mais
+      const rows = document.querySelectorAll('tr[data-produto-id]');
+      rows.forEach(row => {
+        const prodId = row.getAttribute('data-produto-id');
+        if (!itensAtivos.has(prodId)) {
+          row.remove();
+        }
+      });
+
+      // Atualizar subtotais
+      data.cart.forEach(item => {
+        const subtotalElement = document.querySelector('.subtotal-' + item.produtoId);
+        if (subtotalElement) {
+          const subtotal = item.preco * item.quantidade;
+          subtotalElement.textContent = formatCurrency(subtotal);
+        }
+
+        const input = document.getElementById('qty-' + item.produtoId);
+        if (input) {
+          input.value = item.quantidade;
+        }
+      });
+
+      // Atualizar contador do carrinho no navbar
+      const cartCount = document.querySelector('.cart-count');
+      if (cartCount) {
+        cartCount.textContent = data.cart.length;
+      }
+    }
+  </script>
+</body>
+</html>

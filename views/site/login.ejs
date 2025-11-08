@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/" class="logo">
+        <h1>Junta<br>Nova</h1>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Início</a></li>
+        <li><a href="/produto">Produto</a></li>
+        <li><a href="/cadastro">Cadastre-se</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section style="padding: 4rem 0; background: var(--light-gray); min-height: 80vh; display: flex; align-items: center;">
+    <div class="container">
+      <div class="form-card">
+        <h2 style="color: var(--primary-blue); margin-bottom: 1.5rem; text-align: center;">Login</h2>
+
+        <% if (error) { %>
+          <div class="error-message"><%= error %></div>
+        <% } %>
+
+        <form method="POST" action="/login">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+
+          <div class="form-group">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" required>
+          </div>
+
+          <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Entrar</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 1rem;">
+          Não tem conta? <a href="/cadastro" style="color: var(--primary-blue); font-weight: 600;">Cadastre-se</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2024 Junta Nova. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

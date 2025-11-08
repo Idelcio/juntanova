@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(move:*)",
+      "Bash(npm install)",
+      "Bash(timeout 5 npm start)",
+      "Bash(PORT=3001 timeout 5 npm start:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(npm start)",
+      "Bash(node -e:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

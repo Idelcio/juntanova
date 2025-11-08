@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header com badges -->
+    <div class="top-bar">
+      <div class="container">
+        <div class="badges">
+          <span>✓ Domínio Verificado</span>
+          <span>✓ Compra 100% Segura</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar">
+      <div class="container">
+        <a href="/" class="logo">
+          <h1>Junta Nova</h1>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#sobre">Sobre o Produto</a></li>
+          <li><a href="#ingredientes">Ingredientes</a></li>
+          <li><a href="#depoimentos">Depoimentos</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <% if (user) { %> <% if (user. isAdmin) { %>
+          <li><a href="/admin/dashboard" class="btn-admin">Admin</a></li>
+          <% } %>
+          <li><a href="/logout">Sair</a></li>
+          <% } %>
+          <li>
+            <a href="/carrinho" class="cart-icon"
+              >🛒 <span class="cart-count"><%= cart.length %></span></a
+            >
+          </li>
+          <li><a href="#comprar" class="btn-cta">COMPRAR AGORA!</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero hero-with-background" style="position: relative">
+      <div
+        class="hero-background"
+        style="
+          position: absolute;
+          inset: 0;
+          background-image: url('/images/Idosos_correndo.jpg');
+          background-size: cover;
+          background-position: center;
+          z-index: 0;
+        "
+      ></div>
+      <div
+        class="hero-overlay"
+        style="
+          position: absolute;
+          inset: 0;
+          background: rgba(12, 70, 150, 0.75);
+          z-index: 1;
+        "
+      ></div>
+      <div class="container">
+        <div class="hero-content" style="position: relative; z-index: 2">
+          <div class="hero-text">
+            <h1>Junta<br />Nova</h1>
+            <h2>Articulações novas em pouco tempo</h2>
+            <div class="hero-product-image" style="margin-bottom: 1.5rem">
+              <img
+                src="/images/produto2.jpg"
+                alt="Pote Junta Nova"
+                style="
+                  max-width: 260px;
+                  width: 100%;
+                  height: auto;
+                  border-radius: 16px;
+                  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+                "
+              />
+            </div>
+            <div class="price-box">
+              <span class="price-label">Por apenas</span>
+              <span class="price"
+                >R$ <%= produto ? parseFloat(produto.preco_promocional ||
+                produto.preco).toFixed(2).replace('.', ',') : '139,00' %></span
+              >
+            </div>
+            <p class="highlight">30 cápsulas | 500mg cada</p>
+            <button class="btn-primary btn-large" onclick="scrollToPackages()">
+              Ver Pacotes e Promoções
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compras Recentes -->
+    <% if (comprasRecentes && comprasRecentes.length > 0) { %>
+    <section class="compras-recentes">
+      <div class="container">
+        <h3>🔥 Compras Recentes</h3>
+        <div class="compras-list">
+          <% comprasRecentes.forEach(compra => { %>
+          <div class="compra-item">
+            <span class="compra-location"
+              >📍 <%= compra.cidade %> - <%= compra.estado %></span
+            >
+            <span class="compra-time"
+              ><%= getTempoDecorrido(compra.dataPedido) %></span
+            >
+          </div>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+    <% } %>
+
+    <!-- Sobre o Produto -->
+    <section id="sobre" class="sobre-produto">
+      <div class="container">
+        <h2>O que é Junta Nova?</h2>
+        <div class="sobre-content">
+          <div class="sobre-text">
+            <p>
+              <strong>Junta Nova</strong> é um suplemento 100% natural pensado
+              para quem sente o impacto do tempo nos joelhos: rigidez ao
+              levantar, estalos, perda de confiança para subir escadas ou
+              praticar atividade física. Ele atua nutrindo a cartilagem do
+              joelho, ajudando a prevenir o desgaste precoce e a manter o
+              movimento suave mesmo com o passar dos anos.
+            </p>
+            <p>
+              A fórmula reúne colágeno tipo II, condroitina, cúrcuma e outros
+              ativos que trabalham em sinergia para regenerar a cartilagem,
+              controlar inflamações e preservar a lubrificação natural das
+              articulações.
+            </p>
+            <ul>
+              <li>✓ Reforça a cartilagem dos joelhos e evita o atrito entre os ossos</li>
+              <li>✓ Mantém a elasticidade e a lubrificação para movimentos mais suaves</li>
+              <li>✓ Reduz inchaço e desconfortos após caminhadas ou exercícios</li>
+              <li>✓ Protege contra o envelhecimento articular e o desgaste diário</li>
+              <li>✓ Devolve segurança para agachar, subir degraus e viver sem limitações</li>
+            </ul>
+          </div>
+          <div class="sobre-image">
+            <img
+              src="/images/produto3.jpg"
+              alt="Junta Nova"
+              style="
+                width: 100%;
+                max-width: 400px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+              "
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefícios -->
+    <section class="beneficios">
+      <div class="container">
+        <h2>Por que escolher Junta Nova?</h2>
+        <div class="beneficios-grid">
+          <div class="beneficio-card">
+            <div class="beneficio-icon">💊</div>
+            <h3>100% Natural</h3>
+            <p>Composto natural para articulações sem contraindicações</p>
+          </div>
+          <div class="beneficio-card">
+            <div class="beneficio-icon">⚡</div>
+            <h3>Resultados Rápidos</h3>
+            <p>Articulações novas em pouco tempo de uso</p>
+          </div>
+          <div class="beneficio-card">
+            <div class="beneficio-icon">✅</div>
+            <h3>Sem Contraindicações</h3>
+            <p>Seguro para uso contínuo</p>
+          </div>
+          <div class="beneficio-card">
+            <div class="beneficio-icon">🇧🇷</div>
+            <h3>Entrega Nacional</h3>
+            <p>Enviamos para todo o Brasil</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ingredientes -->
+    <section id="ingredientes" class="ingredientes">
+      <div class="container">
+        <h2>Ingredientes Naturais e Poderosos</h2>
+        <div class="ingredientes-grid">
+          <div class="ingrediente-card">
+            <div class="ingrediente-image">
+              <img
+                src="/images/colageno.png"
+                alt="Colágeno Tipo II"
+                style="width: 120px; height: 120px; object-fit: contain"
+              />
+            </div>
+            <h3>Colágeno Tipo II</h3>
+            <p>
+              Essencial para a saúde das cartilagens, ajuda na regeneração e
+              fortalecimento das articulações.
+            </p>
+          </div>
+          <div class="ingrediente-card">
+            <div class="ingrediente-image">
+              <img
+                src="/images/glucosamina.png"
+                alt="Glucosamina"
+                style="width: 120px; height: 120px; object-fit: contain"
+              />
+            </div>
+            <h3>Glucosamina</h3>
+            <p>
+              Componente natural que auxilia na formação e reparação das
+              cartilagens articulares.
+            </p>
+          </div>
+          <div class="ingrediente-card">
+            <div class="ingrediente-image">
+              <img
+                src="/images/condroitina.png"
+                alt="Condroitina"
+                style="width: 120px; height: 120px; object-fit: contain"
+              />
+            </div>
+            <h3>Condroitina</h3>
+            <p>
+              Ajuda a manter a elasticidade e resistência das articulações,
+              reduzindo o desgaste.
+            </p>
+          </div>
+          <div class="ingrediente-card">
+            <div class="ingrediente-image">
+              <img
+                src="/images/curcuma.png"
+                alt="Cúrcuma"
+                style="width: 120px; height: 120px; object-fit: contain"
+              />
+            </div>
+            <h3>Cúrcuma</h3>
+            <p>
+              Poderoso anti-inflamatório natural que auxilia na redução de
+              desconfortos articulares.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pacotes e Preços -->
+    <section id="comprar" class="pacotes">
+      <div class="container">
+        <h2>Escolha o Melhor Pacote Para Você</h2>
+        <p class="pacotes-subtitle">
+          Quanto mais você compra, mais você economiza!
+        </p>
+        <div class="pacotes-grid">
+          <% const pacotesOrigem = typeof pacotes !== 'undefined' ? pacotes :
+          []; const listaPacotes = Array.isArray(pacotesOrigem) ?
+          [...pacotesOrigem] : []; const padroesPacotes = [ { capsulas: 30,
+          preco: 197.0, precoPromocional: 139.0 }, { capsulas: 90, preco: 591.0,
+          precoPromocional: 357.0 }, { capsulas: 150, preco: 985.0,
+          precoPromocional: 495.0 } ]; padroesPacotes.forEach((padrao, index) =>
+          { const existente = listaPacotes.find(p => Number(p.capsulas) ===
+          padrao.capsulas) || listaPacotes[index]; if (!existente) {
+          listaPacotes[index] = { id: null, capsulas: padrao.capsulas, preco:
+          padrao.preco, preco_promocional: padrao.precoPromocional }; } else {
+          existente.preco = existente.preco !== undefined ?
+          parseFloat(existente.preco) : padrao.preco;
+          existente.preco_promocional = existente.preco_promocional !==
+          undefined && existente.preco_promocional !== null ?
+          parseFloat(existente.preco_promocional) : null; listaPacotes[index] =
+          existente; } }); const temPacotes = true; const pacote1 =
+          listaPacotes[0]; const pacote3 = listaPacotes[1]; const pacote5 =
+          listaPacotes[2]; const precoOriginal = pacote1 ? (pacote1.preco ||
+          padroesPacotes[0].preco) : padroesPacotes[0].preco; %>
+
+          <!-- Pacote 1 Unidade -->
+          <div class="pacote-card">
+            <div style="text-align: center; margin-bottom: 1rem">
+              <img
+                src="/images/junta1.png"
+                alt="Pacote 1 pote"
+                style="width: 120px; height: auto"
+              />
+            </div>
+            <div class="pacote-header">
+              <h3><%= pacote1.titulo %></h3>
+              <p class="pacote-duracao"><%= pacote1.duracao %></p>
+            </div>
+            <div class="pacote-preco">
+              <span class="preco-antigo"
+                >De R$ <%= precoOriginal.toFixed(2).replace('.', ',') %></span
+              >
+              <span class="preco-atual"
+                >R$ <%= (pacote1.preco_promocional ||
+                pacote1.preco).toFixed(2).replace('.', ',') %></span
+              >
+              <span class="preco-parcela"
+                >ou 12x de R$ <%= ((pacote1.preco_promocional || pacote1.preco)
+                / 12).toFixed(2).replace('.', ',') %></span
+              >
+            </div>
+            <button
+              class="btn-pacote"
+              onclick="<%= pacote1.id ? `adicionarPacote(${JSON.stringify(pacote1.id)})` : 'comprarAgora()' %>"
+            >
+              Comprar Agora
+            </button>
+            <ul class="pacote-beneficios">
+              <li>✓ 30 cápsulas</li>
+              <li>✓ Frete calculado no checkout</li>
+              <li>✓ Compra 100% segura</li>
+            </ul>
+          </div>
+
+          <!-- Pacote 3 Unidades - MAIS VENDIDO -->
+          <div class="pacote-card pacote-destaque">
+            <div class="pacote-badge">MAIS VENDIDO</div>
+            <div style="text-align: center; margin-bottom: 1rem">
+              <img
+                src="/images/junta3.png"
+                alt="Pacote 3 potes"
+                style="width: 140px; height: auto"
+              />
+            </div>
+            <div class="pacote-header">
+              <h3><%= pacote3.titulo %></h3>
+              <p class="pacote-duracao"><%= pacote3.duracao %></p>
+            </div>
+            <div class="pacote-preco">
+              <span class="preco-antigo"
+                >De R$ <%= (precoOriginal * 3).toFixed(2).replace('.', ',')
+                %></span
+              >
+              <span class="preco-atual"
+                >R$ <%= (pacote3.preco_promocional ||
+                pacote3.preco).toFixed(2).replace('.', ',') %></span
+              >
+              <span class="preco-parcela"
+                >ou 12x de R$ <%= ((pacote3.preco_promocional || pacote3.preco)
+                / 12).toFixed(2).replace('.', ',') %></span
+              >
+              <% const economia3 = ((1 - ((pacote3.preco_promocional ||
+              pacote3.preco) / ((pacote1.preco_promocional || pacote1.preco) *
+              3))) * 100).toFixed(0); %>
+              <span class="economia">ECONOMIZE <%= economia3 %>%</span>
+            </div>
+            <button
+              class="btn-pacote btn-pacote-destaque"
+              onclick="<%= pacote3.id ? `adicionarPacote(${JSON.stringify(pacote3.id)})` : 'comprarAgora()' %>"
+            >
+              Comprar Agora
+            </button>
+            <ul class="pacote-beneficios">
+              <li>✓ 90 cápsulas (3 potes)</li>
+              <li>✓ <strong><%= economia3 %>% de desconto</strong></li>
+              <li>✓ Frete GRÁTIS para Sul e Sudeste</li>
+              <li>✓ Compra 100% segura</li>
+            </ul>
+          </div>
+
+          <!-- Pacote 5 Unidades - MELHOR OFERTA -->
+          <div class="pacote-card pacote-melhor">
+            <div class="pacote-badge pacote-badge-melhor">MELHOR OFERTA</div>
+            <div style="text-align: center; margin-bottom: 1rem">
+              <img
+                src="/images/junta5.png"
+                alt="Pacote 5 potes"
+                style="width: 160px; height: auto"
+              />
+            </div>
+            <div class="pacote-header">
+              <h3><%= pacote5.titulo %></h3>
+              <p class="pacote-duracao"><%= pacote5.duracao %></p>
+            </div>
+            <div class="pacote-preco">
+              <span class="preco-antigo"
+                >De R$ <%= (precoOriginal * 5).toFixed(2).replace('.', ',')
+                %></span
+              >
+              <span class="preco-atual"
+                >R$ <%= (pacote5.preco_promocional ||
+                pacote5.preco).toFixed(2).replace('.', ',') %></span
+              >
+              <span class="preco-parcela"
+                >ou 12x de R$ <%= ((pacote5.preco_promocional || pacote5.preco)
+                / 12).toFixed(2).replace('.', ',') %></span
+              >
+              <% const economia5 = ((1 - ((pacote5.preco_promocional ||
+              pacote5.preco) / ((pacote1.preco_promocional || pacote1.preco) *
+              5))) * 100).toFixed(0); %>
+              <span class="economia">ECONOMIZE <%= economia5 %>%</span>
+            </div>
+            <button
+              class="btn-pacote btn-pacote-melhor"
+              onclick="<%= pacote5.id ? `adicionarPacote(${JSON.stringify(pacote5.id)})` : 'comprarAgora()' %>"
+            >
+              Comprar Agora
+            </button>
+            <ul class="pacote-beneficios">
+              <li>✓ 150 cápsulas (5 potes)</li>
+              <li>✓ <strong><%= economia5 %>% de desconto</strong></li>
+              <li>✓ Frete GRÁTIS para todo o Brasil</li>
+              <li>✓ Compra 100% segura</li>
+              <li>✓ Garantia estendida</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <% if (depoimentos && depoimentos.length > 0) { %>
+    <section class="depoimentos">
+      <div class="container">
+        <h2>O que nossos clientes dizem</h2>
+        <div class="depoimentos-grid">
+          <% depoimentos.slice(0, 3).forEach(depoimento => { %>
+          <div class="depoimento-card">
+            <div class="estrelas">
+              <% for(let i = 0; i < depoimento.estrelas; i++) { %>⭐<% } %>
+            </div>
+            <p class="depoimento-texto">"<%= depoimento.depoimento %>"</p>
+            <div class="depoimento-autor">
+              <strong><%= depoimento.nome %></strong>
+              <span><%= depoimento.cidade %> - <%= depoimento.estado %></span>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+        <div class="text-center">
+          <a href="/produto#depoimentos" class="btn-secondary"
+            >Ver Mais Depoimentos</a
+          >
+        </div>
+      </div>
+    </section>
+    <% } %>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq">
+      <div class="container">
+        <h2>Perguntas Frequentes</h2>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Como devo tomar Junta Nova?</h3>
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Recomendamos tomar 1 cápsula por dia, preferencialmente pela
+                manhã com um copo de água. Para melhores resultados, mantenha o
+                uso contínuo por pelo menos 3 meses.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Quanto tempo leva para ver resultados?</h3>
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Os resultados podem variar de pessoa para pessoa, mas a maioria
+                dos usuários relatam melhorias significativas após 30 a 60 dias
+                de uso contínuo.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Junta Nova tem contraindicações?</h3>
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Junta Nova é um suplemento 100% natural e não possui
+                contraindicações conhecidas. No entanto, se você está grávida,
+                amamentando ou tem alguma condição médica específica, consulte
+                seu médico antes de usar.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Qual a forma de pagamento?</h3>
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Aceitamos cartão de crédito (parcelamento em até 12x) e PIX. O
+                pagamento é 100% seguro através do Mercado Pago.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Como funciona o frete?</h3>
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>
+                O frete é calculado no checkout com base no seu CEP. Para
+                compras de 3 potes, o frete é GRÁTIS para Sul e Sudeste. Para 5
+                potes ou mais, frete GRÁTIS para todo o Brasil!
+              </p>
+            </div>
+          </div>
+
+          <!-- <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <h3>Existe garantia?</h3>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Sim! Oferecemos 30 dias de garantia incondicional. Se você não estiver satisfeito, devolvemos 100% do seu dinheiro.</p>
+          </div>
+        </div> -->
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="cta-final">
+      <div class="container">
+        <h2>Comece sua jornada para articulações saudáveis</h2>
+        <p>Mais saúde, mais vida!</p>
+        <button class="btn-primary btn-large" onclick="scrollToPackages()">
+          Escolher Meu Pacote
+        </button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>Junta Nova</h3>
+            <p>Articulações novas em pouco tempo</p>
+            <p>100% Natural, sem contraindicações</p>
+          </div>
+          <div class="footer-section">
+            <h4>Links Rápidos</h4>
+            <ul>
+              <li><a href="/">Início</a></li>
+              <li><a href="/produto">Produto</a></li>
+              <li><a href="/cadastro">Cadastre-se</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Contato</h4>
+            <p>Email: contato@juntanova.com</p>
+            <p>Vendido em todo o Brasil</p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2024 Junta Nova. Todos os direitos reservados.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      function comprarAgora() {
+        window.location.href = '/produto';
+      }
+
+      function scrollToPackages() {
+        const pacotesSection = document.getElementById('comprar');
+        if (pacotesSection) {
+          pacotesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+
+      async function adicionarPacote(produtoId, quantidade = 1) {
+        const fallbackProdutoId = <%- (typeof produto !== 'undefined' && produto) ? JSON.stringify(produto.id) : 'null' %>;
+        const produtoSelecionado = produtoId || fallbackProdutoId;
+
+        if (!produtoSelecionado) {
+          alert('Produto indisponível no momento.');
+          return;
+        }
+
+        try {
+          const response = await fetch('/carrinho/adicionar', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              produtoId: produtoSelecionado,
+              quantidade
+            })
+          });
+
+          if (response.ok) {
+            window.location.href = '/carrinho';
+          } else {
+            console.error('Erro ao adicionar ao carrinho');
+            window.location.reload();
+          }
+        } catch (error) {
+          console.error('Erro:', error);
+          window.location.reload();
+        }
+      }
+
+      function toggleFaq(element) {
+        const faqItem = element.parentElement;
+        const faqAnswer = faqItem.querySelector('.faq-answer');
+        const faqIcon = element.querySelector('.faq-icon');
+
+        // Fechar todas as outras FAQs
+        document.querySelectorAll('.faq-item').forEach(item => {
+          if (item !== faqItem) {
+            item.classList.remove('active');
+            item.querySelector('.faq-answer').style.display = 'none';
+            item.querySelector('.faq-icon').textContent = '+';
+          }
+        });
+
+        // Toggle da FAQ clicada
+        faqItem.classList.toggle('active');
+        if (faqItem.classList.contains('active')) {
+          faqAnswer.style.display = 'block';
+          faqIcon.textContent = '−';
+        } else {
+          faqAnswer.style.display = 'none';
+          faqIcon.textContent = '+';
+        }
+      }
+
+      function getTempoDecorrido(data) {
+        const agora = new Date();
+        const compra = new Date(data);
+        const diff = Math.floor((agora - compra) / 60000); // minutos
+
+        if (diff < 60) return `há ${diff} minutos`;
+        if (diff < 1440) return `há ${Math.floor(diff / 60)} horas`;
+        return `há ${Math.floor(diff / 1440)} dias`;
+      }
+
+      // Slideshow automático
+      let slideIndex = 0;
+      showSlides();
+
+      function showSlides() {
+        let slides = document.getElementsByClassName("slide");
+
+        for (let i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+        }
+
+        slideIndex++;
+        if (slideIndex > slides.length) {
+          slideIndex = 1;
+        }
+
+        if (slides.length > 0) {
+          slides[slideIndex - 1].style.display = "block";
+        }
+
+        setTimeout(showSlides, 3000); // Troca a cada 3 segundos
+      }
+    </script>
+    <script src="/js/main.js"></script>
+  </body>
+</html>
+
+<% function getTempoDecorrido(data) { const agora = new Date(); const compra =
+new Date(data); const diff = Math.floor((agora - compra) / 60000); if (diff <
+60) return `há ${diff} min`; if (diff < 1440) return `há ${Math.floor(diff /
+60)}h`; return `há ${Math.floor(diff / 1440)}d`; } %>
