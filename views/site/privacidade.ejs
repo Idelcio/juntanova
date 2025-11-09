@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <a href="/" class="logo">
+          <h1>Junta<br />Nova</h1>
+        </a>
+        <ul class="nav-links">
+          <li><a href="/">Início</a></li>
+          <li><a href="/produto">Produto</a></li>
+          <li><a href="/cadastro">Cadastre-se</a></li>
+          <li><a href="/login">Login</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <section
+      style="padding: 4rem 0; background: var(--light-gray); min-height: 80vh"
+    >
+      <div class="container">
+        <div class="form-card" style="max-width: 900px; margin: 0 auto">
+          <h2 style="color: var(--primary-blue); margin-bottom: 1.5rem">
+            Política de Privacidade
+          </h2>
+          <p style="margin-bottom: 1rem">
+            Esta Política descreve como a
+            <strong
+              >Michel Barbosa de Oliveira (CNPJ 61.074.638/0001-61)</strong
+            >
+            coleta, utiliza e protege os dados pessoais dos visitantes e
+            clientes do site Junta Nova.
+          </p>
+
+          <h3 style="color: var(--primary-blue); margin-top: 1.5rem">
+            1. Dados Coletados
+          </h3>
+          <p>
+            Durante o cadastro e pedidos solicitamos nome, CPF, e-mail, telefone
+            e endereço para processamento das compras e entrega dos produtos.
+            Registramos ainda informações de navegação (cookies, endereço IP)
+            para melhorar a experiência no site.
+          </p>
+
+          <h3 style="color: var(--primary-blue); margin-top: 1.5rem">
+            2. Uso das Informações
+          </h3>
+          <ul>
+            <li>Processar pedidos, pagamentos e entregas;</li>
+            <li>
+              Enviar notificações sobre pedidos e promoções (quando autorizado);
+            </li>
+            <li>Cumprir exigências legais e contábeis;</li>
+            <li>Prevenir fraudes e garantir a segurança do site.</li>
+          </ul>
+
+          <h3 style="color: var(--primary-blue); margin-top: 1.5rem">
+            3. Compartilhamento
+          </h3>
+          <p>
+            Compartilhamos dados somente com parceiros necessários (meios de
+            pagamento, transportadoras, provedores de hospedagem). Não vendemos
+            ou alugamos informações pessoais a terceiros.
+          </p>
+
+          <h3 style="color: var(--primary-blue); margin-top: 1.5rem">
+            4. Armazenamento e Segurança
+          </h3>
+          <p>
+            Os dados são armazenados em servidores seguros e acessados apenas
+            por profissionais autorizados. Empregamos criptografia e boas
+            práticas para proteger suas informações.
+          </p>
+
+          <h3 style="color: var(--primary-blue); margin-top: 1.5rem">
+            5. Direitos do Titular
+          </h3>
+          <p>
+            Você pode solicitar a atualização, portabilidade ou exclusão dos
+            seus dados a qualquer momento pelo e-mail
+            <a href="mailto:contato@juntanova.com">contato@juntanova.com</a>.
+            Responderemos em até 15 dias úteis conforme a LGPD.
+          </p>
+
+          <p style="margin-top: 2rem">
+            Última atualização:
+            <strong><%= new Date().toLocaleDateString('pt-BR') %></strong>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-bottom">
+          <p>&copy; 2024 Junta Nova. Todos os direitos reservados.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

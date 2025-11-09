@@ -71,9 +71,13 @@
         "
       ></div>
       <div class="container">
-        <div class="hero-content" style="position: relative; z-index: 2">
-          <div class="hero-text">
-            <h1>Junta<br />Nova</h1>
+        <div class="hero-content" style="position: relative; z-index: 2;">
+          <div class="hero-text" style="position: relative;">
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+              <div style="flex: 1 1 200px;">
+                <h1>Junta<br />Nova</h1>
+              </div>
+            </div>
             <h2>Articulações novas em pouco tempo</h2>
             <div class="hero-product-image" style="margin-bottom: 1.5rem">
               <img
@@ -100,6 +104,19 @@
               Ver Pacotes e Promoções
             </button>
           </div>
+          <img
+            src="/images/siteseguro.png"
+            alt="Site 100% seguro"
+            style="
+              position: absolute;
+              top: -20px;
+              right: -20px;
+              max-width: 100px;
+              width: 100%;
+              height: auto;
+              z-index: 3;
+            "
+          />
         </div>
       </div>
     </section>
@@ -177,6 +194,33 @@
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
               "
             />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="site-seguro">
+      <div class="container">
+        <div class="site-seguro-content" style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; justify-content: space-between;">
+          <div style="flex: 1 1 320px;">
+            <h2 style="color: var(--primary-blue); margin-bottom: 1rem;">Site 100% seguro</h2>
+            <p style="margin-bottom: 1rem;">
+              Trabalhamos com criptografia de dados e todas as transações são processadas
+              diretamente no <strong>Mercado Pago</strong>, plataforma reconhecida e auditada.
+            </p>
+            <p style="margin-bottom: 1rem;">
+              Isso significa que <strong>não armazenamos</strong> dados de cartão de crédito no nosso servidor.
+              Você realiza o pagamento em um ambiente confiável e recebe o comprovante na hora.
+            </p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li>✓ Plataforma Mercado Pago com certificação PCI</li>
+              <li>✓ Pagamentos por cartão, PIX ou boleto</li>
+              <li>✓ Notificação imediata de compra aprovada</li>
+            </ul>
+          </div>
+          <div style="flex: 0 0 220px; text-align: center;">
+            <img src="/images/siteseguro.png" alt="Selo de site seguro" style="max-width: 160px; width: 100%; height: auto; margin-bottom: 1rem;">
+            <img src="/images/mercado_pago.png" alt="Pagamentos Mercado Pago" style="max-width: 160px; width: 100%; height: auto; margin-bottom: 1rem;">
           </div>
         </div>
       </div>
@@ -529,15 +573,18 @@
             </div>
           </div>
 
-          <!-- <div class="faq-item">
-          <div class="faq-question" onclick="toggleFaq(this)">
-            <h3>Existe garantia?</h3>
-            <span class="faq-icon">+</span>
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Existe garantia?</h3>
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Sim! Oferecemos 7 dias de garantia incondicional. Se você não
+                estiver satisfeito, devolvemos 100% do seu dinheiro.
+              </p>
+            </div>
           </div>
-          <div class="faq-answer">
-            <p>Sim! Oferecemos 30 dias de garantia incondicional. Se você não estiver satisfeito, devolvemos 100% do seu dinheiro.</p>
-          </div>
-        </div> -->
         </div>
       </div>
     </section>
@@ -577,6 +624,10 @@
         </div>
         <div class="footer-bottom">
           <p>&copy; 2024 Junta Nova. Todos os direitos reservados.</p>
+          <p style="font-size: 0.9rem">
+            <a href="/termos" style="color: #fff;">Termos de Uso</a> •
+            <a href="/privacidade" style="color: #fff;">Política de Privacidade</a>
+          </p>
         </div>
       </div>
     </footer>

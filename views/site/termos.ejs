@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <a href="/" class="logo">
+          <h1>Junta<br />Nova</h1>
+        </a>
+        <ul class="nav-links">
+          <li><a href="/">Início</a></li>
+          <li><a href="/produto">Produto</a></li>
+          <li><a href="/cadastro">Cadastre-se</a></li>
+          <li><a href="/login">Login</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <section
+      style="padding: 4rem 0; background: var(--light-gray); min-height: 80vh"
+    >
+      <div class="container">
+        <div class="form-card" style="max-width: 900px; margin: 0 auto">
+          <h2 style="color: var(--primary-blue); margin-bottom: 1.5rem">
+            Termos de Uso
+          </h2>
+          <p style="margin-bottom: 1rem">
+            Estes Termos de Uso regulamentam o acesso e a utilização do site
+            Junta Nova, operado por
+            <strong>Michel Barbosa de Oliveira (CNPJ 61.074.638/0001-61)</strong
+            >. Ao navegar ou realizar pedidos, você concorda integralmente com
+            as regras abaixo.
+          </p>
+
+          <h3 style="color: var(--primary-blue); margin-top: 1.5rem">
+            1. Cadastro e Conta
+          </h3>
+          <p>
+            O usuário deve fornecer informações verdadeiras, completas e
+            atualizadas. Reservamo-nos o direito de bloquear cadastros com dados
+            suspeitos, duplicados ou que infrinjam a legislação.
+          </p>
+
+          <h3 style="color: var(--primary-blue); margin-top: 1.5rem">
+            2. Uso do Site
+          </h3>
+          <p>
+            É proibido utilizar a plataforma para fins ilícitos, envio de
+            conteúdo ofensivo ou tentativa de violar a segurança do sistema.
+            Detectado uso indevido, a conta poderá ser encerrada sem aviso
+            prévio.
+          </p>
+
+          <h3 style="color: var(--primary-blue); margin-top: 1.5rem">
+            3. Produtos e Informações Médicas
+          </h3>
+          <p>
+            Junta Nova é um suplemento alimentar. Embora auxilie na saúde
+            articular, recomendamos acompanhamento médico antes de iniciar
+            qualquer tratamento, especialmente para pessoas com condições
+            preexistentes, gestantes ou lactantes.
+          </p>
+
+          <h3 style="color: var(--primary-blue); margin-top: 1.5rem">
+            4. Pagamentos e Entregas
+          </h3>
+          <p>
+            Os pedidos são liberados após confirmação do pagamento. Prazos e
+            valores de frete podem variar de acordo com a região. Eventuais
+            atrasos por parte dos correios ou transportadoras serão comunicados
+            ao usuário.
+          </p>
+
+          <h3 style="color: var(--primary-blue); margin-top: 1.5rem">
+            5. Trocas e Devoluções
+          </h3>
+          <p>
+            Em caso de arrependimento, o cliente pode solicitar o cancelamento
+            em até 7 dias corridos após o recebimento, conforme o Código de
+            Defesa do Consumidor. O produto deve estar lacrado e em perfeito
+            estado.
+          </p>
+
+          <h3 style="color: var(--primary-blue); margin-top: 1.5rem">
+            6. Propriedade Intelectual
+          </h3>
+          <p>
+            Todo o conteúdo do site (textos, imagens e marcas) pertence à Junta
+            Nova. É proibida a reprodução sem autorização expressa.
+          </p>
+
+          <p style="margin-top: 2rem">
+            Última atualização:
+            <strong><%= new Date().toLocaleDateString('pt-BR') %></strong>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-bottom">
+          <p>&copy; 2024 Junta Nova. Todos os direitos reservados.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

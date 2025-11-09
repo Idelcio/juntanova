@@ -130,7 +130,28 @@ router.get('/cadastro', (req, res) => {
 
 router.post('/cadastro', async (req, res) => {
   try {
-    const { nome, email, senha, telefone, cpf, cep, rua, numero, complemento, bairro, cidade, estado } = req.body;
+    const {
+      nome,
+      email,
+      senha,
+      telefone,
+      cpf,
+      cep,
+      rua,
+      numero,
+      complemento,
+      bairro,
+      cidade,
+      estado,
+      aceitoTermos
+    } = req.body;
+
+    if (!aceitoTermos) {
+      return res.render('site/cadastro', {
+        title: 'Cadastre-se',
+        error: 'Você precisa aceitar os Termos de Uso e a Política de Privacidade para continuar.'
+      });
+    }
 
     // Verificar se email já existe
     const usuarioExistente = await Usuario.buscarPorEmail(email);
@@ -172,6 +193,15 @@ router.post('/cadastro', async (req, res) => {
 // Login
 router.get('/login', (req, res) => {
   res.render('site/login', { title: 'Login', error: null });
+});
+
+// Termos e Política
+router.get('/termos', (req, res) => {
+  res.render('site/termos', { title: 'Termos de Uso' });
+});
+
+router.get('/privacidade', (req, res) => {
+  res.render('site/privacidade', { title: 'Política de Privacidade' });
 });
 
 router.post('/login', async (req, res) => {
